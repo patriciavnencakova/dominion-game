@@ -1,6 +1,7 @@
 package sk.uniba.fmph.dcs;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Turn {
     public final ArrayList<BuyDeck> buyDecks = new ArrayList<>();
@@ -32,14 +33,15 @@ public class Turn {
             baseCards.add(gameCard);
         }
         discardPile = new DiscardPile(new ArrayList<>());
+        Collections.shuffle(baseCards);
         deck = new Deck(baseCards, discardPile);
         hand = new Hand(deck);
         play = new Play();
     }
 
     public boolean playCard(int idx) {
+        CardInterface card = hand.getCardFromHand(idx);
         if (hand.play(idx)) {
-            CardInterface card = hand.getCardFromHand(idx);
             play.putTo(card);
             card.evaluate(turnStatus);
             hand.handCards.addAll(deck.draw(card.cardType().getPlusCards()));
